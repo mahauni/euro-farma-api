@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+    postgres:
+        image: postgres:latest
+        container_name: fiap-gamify
+        environment:
+            PGPASSWORD: "postgres"
+            POSTGRES_DB: "fiap-gamify"
+            POSTGRES_USER: "postgres"
+            POSTGRES_PASSWORD: "postgres"
+        volumes:
+            - pg-data:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+
+volumes:
+    pg-data:
