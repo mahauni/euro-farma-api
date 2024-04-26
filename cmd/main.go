@@ -11,9 +11,11 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
-	"github.com/mahauni/fiap-gamify/internal/handlers"
-	"github.com/mahauni/fiap-gamify/internal/infra/repository"
-	"github.com/mahauni/fiap-gamify/internal/quizzes/usecase"
+	answerUsecase "github.com/mahauni/euro-farma-api/internal/answers/usecase"
+	"github.com/mahauni/euro-farma-api/internal/handlers"
+	"github.com/mahauni/euro-farma-api/internal/infra/repository"
+	questionUsecase "github.com/mahauni/euro-farma-api/internal/questions/usecase"
+	quizUsecase "github.com/mahauni/euro-farma-api/internal/quizzes/usecase"
 )
 
 func main() {
@@ -53,14 +55,21 @@ func main() {
 	r.Use(middleware.Timeout(60 * time.Second))
 
 	quizRepo := repository.NewQuizRepositoryPostgres(conn)
-	quizUC := usecase.NewCreateQuizUseCase(quizRepo)
+	questionRepo := repository.NewQuestionRepositoryPostgres(conn)
+	answerRepo := repository.NewAnswerRepositoryPostgres(conn)
+
+	quizUC := quizUsecase.NewCreateQuizUseCase(quizRepo)
+	questionUC := questionUsecase.NewCreateQuestionUseCase(questionRepo)
+	answerUC := answerUsecase.NewCreateAnswerUseCase(answerRepo)
 
 	r.Route("/api", func(r chi.Router) {
 		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte("hi"))
 		})
 
-		handlers.NewQuizHandler(r, *quizUC)
+		handlers.NewQuizHandler(r, quizUC)
+		handlers.NewQuestionHandler(r, questionUC)
+		handlers.NewAnswerHandler(r, answerUC)
 	})
 
 	http.ListenAndServe(":3333", r)

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/mahauni/fiap-gamify/internal/quizzes/entity"
+	"github.com/mahauni/euro-farma-api/internal/quizzes/entity"
 	// "github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -21,11 +21,10 @@ func NewQuizRepositoryPostgres(db *pgx.Conn) *QuizRepositoryPostgres {
 }
 
 func (repo *QuizRepositoryPostgres) Create(ctx context.Context, quiz *entity.Quiz) error {
-	query := `INSERT INTO quiz (question, answer) VALUES (@quizQuestion, @quizAnswer)`
+	query := `INSERT INTO quiz (category) VALUES (@quizCategory)`
 
 	args := pgx.NamedArgs{
-		"quizQuestion": quiz.Question,
-		"quizAnswer":   quiz.Answers,
+		"quizCategory": quiz.Category,
 	}
 
 	_, err := repo.db.Exec(ctx, query, args)
@@ -36,8 +35,8 @@ func (repo *QuizRepositoryPostgres) Create(ctx context.Context, quiz *entity.Qui
 	return nil
 }
 
-func (repo *QuizRepositoryPostgres) FindById(ctx context.Context, id int) (*entity.Quiz, error) {
-	query := `SELECT id, question, answer FROM quiz WHERE id = @quizId`
+func (repo *QuizRepositoryPostgres) FindById(ctx context.Context, id int) (entity.Quiz, error) {
+	query := `SELECT id, category FROM quiz WHERE id = @quizId`
 
 	args := pgx.NamedArgs{
 		"quizId": id,
@@ -45,15 +44,15 @@ func (repo *QuizRepositoryPostgres) FindById(ctx context.Context, id int) (*enti
 
 	rows, err := repo.db.Query(ctx, query, args)
 	if err != nil {
-		return nil, fmt.Errorf("unable to query quiz: %w", err)
+		return entity.Quiz{}, fmt.Errorf("unable to query quiz: %w", err)
 	}
 	defer rows.Close()
 
-	return pgx.CollectOneRow(rows, pgx.RowToStructByName[*entity.Quiz])
+	return pgx.CollectOneRow(rows, pgx.RowToStructByName[entity.Quiz])
 }
 
-func (repo *QuizRepositoryPostgres) FindAll(ctx context.Context) ([]*entity.Quiz, error) {
-	query := `SELECT id, question, answer FROM quiz`
+func (repo *QuizRepositoryPostgres) FindAll(ctx context.Context) ([]entity.Quiz, error) {
+	query := `SELECT id, category FROM quiz`
 
 	rows, err := repo.db.Query(ctx, query)
 	if err != nil {
@@ -61,7 +60,7 @@ func (repo *QuizRepositoryPostgres) FindAll(ctx context.Context) ([]*entity.Quiz
 	}
 	defer rows.Close()
 
-	return pgx.CollectRows(rows, pgx.RowToStructByName[*entity.Quiz])
+	return pgx.CollectRows(rows, pgx.RowToStructByName[entity.Quiz])
 }
 
 func (repo *QuizRepositoryPostgres) Delete(ctx context.Context, id int) error {
@@ -80,11 +79,10 @@ func (repo *QuizRepositoryPostgres) Delete(ctx context.Context, id int) error {
 }
 
 func (repo *QuizRepositoryPostgres) Update(ctx context.Context, quiz *entity.Quiz) error {
-	query := `UPDATE quiz SET question = @quizQuestion, answer = @quizAnswer, WHERE id = @quizId`
+	query := `UPDATE quiz SET category = @quizCategory, WHERE id = @quizId`
 
 	args := pgx.NamedArgs{
-		"quizQuestion": quiz.Question,
-		"quizAnswer":   quiz.Answers,
+		"quizCategory": quiz.Category,
 		"quizId":       quiz.ID,
 	}
 

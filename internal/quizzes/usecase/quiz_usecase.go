@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 
-	"github.com/mahauni/fiap-gamify/internal/quizzes/entity"
+	"github.com/mahauni/euro-farma-api/internal/quizzes/entity"
 )
 
 type QuizUsecase struct {
@@ -17,7 +17,7 @@ func NewCreateQuizUseCase(repository entity.QuizRepository) *QuizUsecase {
 }
 
 func (usecase *QuizUsecase) CreateQuiz(ctx context.Context, inputQuiz *entity.Quiz) error {
-	quiz := entity.NewQuiz(inputQuiz.ID, inputQuiz.Question, inputQuiz.Answers)
+	quiz := entity.NewQuiz(inputQuiz.ID, inputQuiz.Category)
 
 	err := usecase.repository.Create(ctx, quiz)
 	if err != nil {
@@ -28,12 +28,7 @@ func (usecase *QuizUsecase) CreateQuiz(ctx context.Context, inputQuiz *entity.Qu
 }
 
 func (usecase *QuizUsecase) UpdateQuiz(ctx context.Context, inputQuiz *entity.Quiz) error {
-	quiz, err := usecase.repository.FindById(ctx, inputQuiz.ID)
-	if err != nil {
-		return err
-	}
-
-	err = usecase.repository.Update(ctx, quiz)
+	err := usecase.repository.Update(ctx, inputQuiz)
 	if err != nil {
 		return err
 	}
@@ -47,7 +42,7 @@ func (usecase *QuizUsecase) DeleteQuiz(ctx context.Context, id int) error {
 		return err
 	}
 
-	err = usecase.repository.Update(ctx, quiz)
+	err = usecase.repository.Update(ctx, &quiz)
 	if err != nil {
 		return err
 	}
@@ -61,10 +56,10 @@ func (usecase *QuizUsecase) FindQuizById(ctx context.Context, id int) (*entity.Q
 		return nil, err
 	}
 
-	return quiz, nil
+	return &quiz, nil
 }
 
-func (usecase *QuizUsecase) FindAllQuiz(ctx context.Context) ([]*entity.Quiz, error) {
+func (usecase *QuizUsecase) FindAllQuiz(ctx context.Context) ([]entity.Quiz, error) {
 	quizzes, err := usecase.repository.FindAll(ctx)
 	if err != nil {
 		return nil, err

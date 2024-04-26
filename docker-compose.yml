@@ -1,8 +1,8 @@
 version: "3.7"
 services:
-    postgres:
+    db-euro-farma:
         image: postgres:latest
-        container_name: fiap-gamify
+        container_name: euro-farma-api
         environment:
             PGPASSWORD: "postgres"
             POSTGRES_DB: "fiap-gamify"
@@ -12,6 +12,26 @@ services:
             - pg-data:/var/lib/postgresql/data
         ports:
             - "5432:5432"
+        networks:
+            - euro-farma-network
+    go-api:
+        container_name: go-api
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "3333:3333"
+        networks:
+            - euro-farma-network
+        depends_on:
+            - db-euro-farma
+        env_file:
+            - .env
+        volumes:
+            - .:/usr/src/app
 
 volumes:
     pg-data:
+
+networks:
+    euro-farma-network:

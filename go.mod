@@ -1,4 +1,4 @@
-module github.com/mahauni/fiap-gamify
+module github.com/mahauni/euro-farma-api
 
 go 1.20
 
