@@ -1,8 +1,8 @@
 version: "3.7"
 services:
-    db-euro-farma:
+    db:
         image: postgres:latest
-        container_name: euro-farma-api
+        container_name: euro-farma-db
         environment:
             PGPASSWORD: "postgres"
             POSTGRES_DB: "fiap-gamify"
@@ -15,7 +15,7 @@ services:
         networks:
             - euro-farma-network
     go-api:
-        container_name: go-api
+        container_name: euro-farma-api
         build:
             context: .
             dockerfile: Dockerfile
@@ -24,7 +24,7 @@ services:
         networks:
             - euro-farma-network
         depends_on:
-            - db-euro-farma
+            - db
         env_file:
             - docker.env
         volumes:
