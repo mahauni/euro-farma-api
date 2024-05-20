@@ -3,8 +3,9 @@ package entity
 import "context"
 
 type Quiz struct {
-	ID       int    `json:"id" db:"id"`
-	Category string `json:"category"`
+	Id         int    `json:"id" db:"id"`
+	Name       string `json:"name"`
+	TrainingId int    `json:"category"`
 }
 
 type QuizRepository interface {
@@ -15,9 +16,10 @@ type QuizRepository interface {
 	Update(ctx context.Context, quiz *Quiz) error
 }
 
-func NewQuiz(id int, category string) *Quiz {
+func NewQuiz(id int, name string, trainingId int) *Quiz {
 	return &Quiz{
-		ID:       id,
-		Category: category,
+		Id:         id,
+		Name:       name,
+		TrainingId: trainingId,
 	}
 }

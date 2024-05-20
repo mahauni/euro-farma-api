@@ -1,13 +1,19 @@
 package entity
 
-import "context"
+import (
+	"context"
+
+	userTraining "github.com/mahauni/euro-farma-api/internal/userTraining/entity"
+)
 
 type User struct {
-	ID       int    `json:"id" db:"id"`
+	Id       int    `json:"id" db:"id"`
 	Name     string `json:"name"`
 	Password string `json:"password"`
 	Email    string `json:"email"`
 	Points   int    `json:"points"`
+	// i dont know if i need to do this
+	Trainings []userTraining.UserTraining `json:"trainings"`
 }
 
 type UserRepository interface {
@@ -20,7 +26,7 @@ type UserRepository interface {
 
 func NewUser(id int, name string, password string, email string, points int) *User {
 	return &User{
-		ID:       id,
+		Id:       id,
 		Name:     name,
 		Password: password,
 		Email:    email,

@@ -17,7 +17,7 @@ func NewCreateUserUseCase(repository entity.UserRepository) *UserUsecase {
 }
 
 func (usecase *UserUsecase) CreateUser(ctx context.Context, inputUser *entity.User) error {
-	user := entity.NewUser(inputUser.ID, inputUser.Name, inputUser.Password, inputUser.Email, inputUser.Points)
+	user := entity.NewUser(inputUser.Id, inputUser.Name, inputUser.Password, inputUser.Email, inputUser.Points)
 
 	err := usecase.repository.Create(ctx, user)
 	if err != nil {

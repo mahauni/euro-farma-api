@@ -17,7 +17,7 @@ func NewCreateQuestionUseCase(repository entity.QuestionRepository) *QuestionUse
 }
 
 func (usecase *QuestionUsecase) CreateQuestion(ctx context.Context, inputQuestion *entity.Question) error {
-	question := entity.NewQuestion(inputQuestion.ID, inputQuestion.Question, inputQuestion.Score, inputQuestion.QuizId)
+	question := entity.NewQuestion(inputQuestion.Id, inputQuestion.Question, inputQuestion.Score, inputQuestion.QuizId)
 
 	err := usecase.repository.Create(ctx, question)
 	if err != nil {

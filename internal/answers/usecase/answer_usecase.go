@@ -18,7 +18,7 @@ func NewCreateAnswerUseCase(repository entity.AnswerRepository) *AnswerUsecase {
 
 func (usecase *AnswerUsecase) CreateAnswer(ctx context.Context, inputAnswer *entity.Answer) error {
 	answer := entity.NewAnswer(
-		inputAnswer.ID,
+		inputAnswer.Id,
 		inputAnswer.Answer,
 		inputAnswer.Correct,
 		inputAnswer.QuizId,

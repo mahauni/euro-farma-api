@@ -37,13 +37,13 @@ func NewQuizHandler(r chi.Router, useCase *usecase.QuizUsecase) {
 
 func (h *quizHandler) QuizCtx(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		quizID, err := strconv.Atoi(chi.URLParam(r, "id"))
+		quizId, err := strconv.Atoi(chi.URLParam(r, "id"))
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
 		}
 
-		quiz, err := h.QuizUsecase.FindQuizById(r.Context(), quizID)
+		quiz, err := h.QuizUsecase.FindQuizById(r.Context(), quizId)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
@@ -113,7 +113,7 @@ func (h *quizHandler) DeleteQuiz(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := h.QuizUsecase.DeleteQuiz(ctx, quiz.ID)
+	err := h.QuizUsecase.DeleteQuiz(ctx, quiz.Id)
 
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

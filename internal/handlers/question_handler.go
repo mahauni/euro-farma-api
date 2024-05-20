@@ -38,13 +38,13 @@ func NewQuestionHandler(r chi.Router, useCase *usecase.QuestionUsecase) {
 
 func (h *questionHandler) QuestionCtx(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		questionID, err := strconv.Atoi(chi.URLParam(r, "id"))
+		questionId, err := strconv.Atoi(chi.URLParam(r, "id"))
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
 		}
 
-		question, err := h.QuestionUsecase.FindQuestionById(r.Context(), questionID)
+		question, err := h.QuestionUsecase.FindQuestionById(r.Context(), questionId)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
@@ -114,7 +114,7 @@ func (h *questionHandler) DeleteQuestion(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	err := h.QuestionUsecase.DeleteQuestion(ctx, question.ID)
+	err := h.QuestionUsecase.DeleteQuestion(ctx, question.Id)
 
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

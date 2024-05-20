@@ -67,7 +67,7 @@ func (repo *AnswerRepositoryPostgres) FindAll(ctx context.Context) ([]entity.Ans
 }
 
 func (repo *AnswerRepositoryPostgres) Delete(ctx context.Context, id int) error {
-	query := `DELETE * FROM quiz_answers WHERE ID = @answerId`
+	query := `DELETE * FROM quiz_answers WHERE Id = @answerId`
 
 	args := pgx.NamedArgs{
 		"answerId": id,
@@ -91,7 +91,7 @@ func (repo *AnswerRepositoryPostgres) Update(ctx context.Context, answer *entity
 		"answerCorrect":    answer.Correct,
 		"answerQuizId":     answer.QuizId,
 		"answerQuestionId": answer.QuestionId,
-		"answerId":         answer.ID,
+		"answerId":         answer.Id,
 	}
 
 	_, err := repo.db.Exec(ctx, query, args)

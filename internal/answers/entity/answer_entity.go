@@ -3,7 +3,7 @@ package entity
 import "context"
 
 type Answer struct {
-	ID         int `json:"id"`
+	Id         int `json:"id"`
 	Answer     string
 	Correct    bool
 	QuizId     int `json:"quiz_id" db:"quiz_id"`
@@ -22,7 +22,7 @@ type AnswerRepository interface {
 
 func NewAnswer(id int, answer string, correct bool, quizId int, questionId int) *Answer {
 	return &Answer{
-		ID:         id,
+		Id:         id,
 		Answer:     answer,
 		Correct:    correct,
 		QuizId:     quizId,

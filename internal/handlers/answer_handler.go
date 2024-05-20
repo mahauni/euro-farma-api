@@ -39,13 +39,13 @@ func NewAnswerHandler(r chi.Router, useCase *usecase.AnswerUsecase) {
 
 func (h *answerHandler) AnswerCtx(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		answerID, err := strconv.Atoi(chi.URLParam(r, "id"))
+		answerId, err := strconv.Atoi(chi.URLParam(r, "id"))
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
 		}
 
-		answer, err := h.AnswerUsecase.FindAnswerById(r.Context(), answerID)
+		answer, err := h.AnswerUsecase.FindAnswerById(r.Context(), answerId)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
@@ -115,7 +115,7 @@ func (h *answerHandler) DeleteAnswer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := h.AnswerUsecase.DeleteAnswer(ctx, answer.ID)
+	err := h.AnswerUsecase.DeleteAnswer(ctx, answer.Id)
 
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

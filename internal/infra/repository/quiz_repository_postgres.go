@@ -21,10 +21,11 @@ func NewQuizRepositoryPostgres(db *pgx.Conn) *QuizRepositoryPostgres {
 }
 
 func (repo *QuizRepositoryPostgres) Create(ctx context.Context, quiz *entity.Quiz) error {
-	query := `INSERT INTO quiz (category) VALUES (@quizCategory)`
+	query := `INSERT INTO quiz (name, training_id) VALUES (@quizName, @quizTrainingId)`
 
 	args := pgx.NamedArgs{
-		"quizCategory": quiz.Category,
+		"quizName":       quiz.Name,
+		"quizTrainingId": quiz.TrainingId,
 	}
 
 	_, err := repo.db.Exec(ctx, query, args)
@@ -36,7 +37,7 @@ func (repo *QuizRepositoryPostgres) Create(ctx context.Context, quiz *entity.Qui
 }
 
 func (repo *QuizRepositoryPostgres) FindById(ctx context.Context, id int) (entity.Quiz, error) {
-	query := `SELECT id, category FROM quiz WHERE id = @quizId`
+	query := `SELECT id, name, training_id FROM quiz WHERE id = @quizId`
 
 	args := pgx.NamedArgs{
 		"quizId": id,
@@ -52,7 +53,7 @@ func (repo *QuizRepositoryPostgres) FindById(ctx context.Context, id int) (entit
 }
 
 func (repo *QuizRepositoryPostgres) FindAll(ctx context.Context) ([]entity.Quiz, error) {
-	query := `SELECT id, category FROM quiz`
+	query := `SELECT id, name, training_id FROM quiz`
 
 	rows, err := repo.db.Query(ctx, query)
 	if err != nil {
@@ -64,7 +65,7 @@ func (repo *QuizRepositoryPostgres) FindAll(ctx context.Context) ([]entity.Quiz,
 }
 
 func (repo *QuizRepositoryPostgres) Delete(ctx context.Context, id int) error {
-	query := `DELETE * FROM quiz WHERE ID = @quizId`
+	query := `DELETE * FROM quiz WHERE Id = @quizId`
 
 	args := pgx.NamedArgs{
 		"quizId": id,
@@ -79,11 +80,12 @@ func (repo *QuizRepositoryPostgres) Delete(ctx context.Context, id int) error {
 }
 
 func (repo *QuizRepositoryPostgres) Update(ctx context.Context, quiz *entity.Quiz) error {
-	query := `UPDATE quiz SET category = @quizCategory, WHERE id = @quizId`
+	query := `UPDATE quiz SET name = @quizName, training_id = @quizTraining_id WHERE id = @quizId`
 
 	args := pgx.NamedArgs{
-		"quizCategory": quiz.Category,
-		"quizId":       quiz.ID,
+		"quizName":       quiz.Name,
+		"quizTrainingId": quiz.TrainingId,
+		"quizId":         quiz.Id,
 	}
 
 	_, err := repo.db.Exec(ctx, query, args)

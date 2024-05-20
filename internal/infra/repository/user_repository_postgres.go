@@ -68,7 +68,7 @@ func (repo *UserRepositoryPostgres) FindAll(ctx context.Context) ([]entity.User,
 }
 
 func (repo *UserRepositoryPostgres) Delete(ctx context.Context, id int) error {
-	query := `DELETE * FROM users WHERE ID = @userId`
+	query := `DELETE * FROM users WHERE Id = @userId`
 
 	args := pgx.NamedArgs{
 		"userId": id,
@@ -84,13 +84,14 @@ func (repo *UserRepositoryPostgres) Delete(ctx context.Context, id int) error {
 
 func (repo *UserRepositoryPostgres) Update(ctx context.Context, user *entity.User) error {
 	query := `UPDATE users SET name = @userName, email = @userEmail, password = @userPassword, 
-		points, @userPoints, WHERE id = @userId`
+		points = @userPoints, WHERE id = @userId`
 
 	args := pgx.NamedArgs{
 		"userName":     user.Name,
 		"userEmail":    user.Email,
 		"userPassword": user.Password,
 		"userPoints":   user.Points,
+		"userId":       user.Id,
 	}
 
 	_, err := repo.db.Exec(ctx, query, args)

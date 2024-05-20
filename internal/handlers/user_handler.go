@@ -37,13 +37,13 @@ func NewUserHandler(r chi.Router, useCase *usecase.UserUsecase) {
 
 func (h *userHandler) UserCtx(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		userID, err := strconv.Atoi(chi.URLParam(r, "id"))
+		userId, err := strconv.Atoi(chi.URLParam(r, "id"))
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
 		}
 
-		user, err := h.UserUsecase.FindUserById(r.Context(), userID)
+		user, err := h.UserUsecase.FindUserById(r.Context(), userId)
 		if err != nil {
 			http.Error(w, http.StatusText(404), 404)
 			return
@@ -113,7 +113,7 @@ func (h *userHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := h.UserUsecase.DeleteUser(ctx, user.ID)
+	err := h.UserUsecase.DeleteUser(ctx, user.Id)
 
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

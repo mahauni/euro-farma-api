@@ -3,7 +3,7 @@ package entity
 import "context"
 
 type Question struct {
-	ID       int    `json:"id"`
+	Id       int    `json:"id"`
 	Question string `json:"question"`
 	Score    int    `json:"score"`
 	QuizId   int    `json:"quiz_id" db:"quiz_id"`
@@ -20,7 +20,7 @@ type QuestionRepository interface {
 
 func NewQuestion(id int, question string, score int, quizId int) *Question {
 	return &Question{
-		ID:       id,
+		Id:       id,
 		Question: question,
 		Score:    score,
 		QuizId:   quizId,
